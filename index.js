@@ -9,14 +9,23 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 const app = express();
 app.get('/', (req, res) => {
-    res.send('hello I am working')
+  res.sendFile(__dirname + '/index.html');
 })
 
 
 client.connect(err => {
-  const collection = client.db("organicDb").collection("products ");
-  // perform actions on the collection object
-  client.close();
+  const productCollection = client.db("organicDb").collection("products ");
+  app.post("/addProduct", (req, res) => {
+    collection.insertOne()
+      .then(res => {
+        console.log('One product added');
+      })
+  })
+
+
+  // console.log('database connected');
+
+  // client.close();
 });
 
 
