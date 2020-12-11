@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 
 const password = 'tamim107';
@@ -8,18 +9,26 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 })
 
 
 client.connect(err => {
-  const productCollection = client.db("organicDb").collection("products ");
+  const productCollection = client.db("organicDb").collection("products");
+
+
   app.post("/addProduct", (req, res) => {
-    collection.insertOne()
-      .then(res => {
-        console.log('One product added');
-      })
+    const product = req.body;
+    console.log(product);
+    productCollection.insertOne(product)
+    .then(result => {
+      console.log('data added successfully');
+      res.send('Data added');
+    })
   })
 
 
